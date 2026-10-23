@@ -1189,8 +1189,8 @@
         <h1>Confira seu código</h1>
         <p class="auth-intro" id="auth-destination"></p>
         <form id="auth-code-form" novalidate>
-          <label for="auth-code">Código de 6 dígitos</label>
-          <input id="auth-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required>
+          <label for="auth-code">Código de confirmação</label>
+          <input id="auth-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,8}" maxlength="8" placeholder="00000000" required>
           <button class="auth-primary" type="submit">Confirmar e continuar</button>
         </form>
         <div class="auth-actions">
@@ -7568,14 +7568,14 @@
         sendConfirmationCode($('#auth-contact-form button[type="submit"]'));
       });
       $('#auth-code').addEventListener('input', event => {
-        event.target.value = event.target.value.replace(/\D/g, '').slice(0, 6);
+        event.target.value = event.target.value.replace(/\D/g, '').slice(0, 8);
       });
       $('#auth-code-form').addEventListener('submit', async event => {
         event.preventDefault();
         if (busy || !pendingContact || !supabaseClient) return;
         const token = $('#auth-code').value.trim();
-        if (!/^\d{6}$/.test(token)) {
-          setStatus('Digite o código de 6 dígitos recebido.', true);
+        if (!/^\d{6,8}$/.test(token)) {
+          setStatus('Digite o código de confirmação recebido por e-mail ou SMS.', true);
           $('#auth-code').focus();
           return;
         }
